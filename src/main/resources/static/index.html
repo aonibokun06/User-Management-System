@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Management System</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            font-size: 1.1em;
+            opacity: 0.9;
+        }
+
+        .content {
+            padding: 30px;
+        }
+
+        .form-section {
+            background: #f8f9fa;
+            padding: 25px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+        }
+
+        .form-section h2 {
+            color: #333;
+            margin-bottom: 20px;
+            font-size: 1.5em;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 600;
+            color: #555;
+        }
+
+        .form-group input, .form-group textarea {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e1e5e9;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: border-color 0.3s ease;
+        }
+
+        .form-group input:focus, .form-group textarea:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-right: 10px;
+            margin-bottom: 10px;
+        }
+
+        .btn-primary {
+            background: #667eea;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #5a6fd8;
+            transform: translateY(-2px);
+        }
+
+        .btn-success {
+            background: #28a745;
+            color: white;
+        }
+
+        .btn-success:hover {
+            background: #218838;
+            transform: translateY(-2px);
+        }
+
+        .btn-warning {
+            background: #ffc107;
+            color: #212529;
+        }
+
+        .btn-warning:hover {
+            background: #e0a800;
+            transform: translateY(-2px);
+        }
+
+        .btn-danger {
+            background: #dc3545;
+            color: white;
+        }
+
+        .btn-danger:hover {
+            background: #c82333;
+            transform: translateY(-2px);
+        }
+
+        .btn-secondary {
+            background: #6c757d;
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            background: #5a6268;
+            transform: translateY(-2px);
+        }
+
+        .table-container {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        th, td {
+            padding: 15px;
+            text-align: left;
+            border-bottom: 1px solid #e1e5e9;
+        }
+
+        th {
+            background: #f8f9fa;
+            font-weight: 600;
+            color: #333;
+        }
+
+        tr:hover {
+            background: #f8f9fa;
+        }
+
+        .alert {
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 8px;
+            font-weight: 500;
+        }
+
+        .alert-success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .alert-error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 20px;
+            color: #666;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                margin: 10px;
+                border-radius: 10px;
+            }
+            
+            .header {
+                padding: 20px;
+            }
+            
+            .header h1 {
+                font-size: 2em;
+            }
+            
+            .content {
+                padding: 20px;
+            }
+            
+            .btn {
+                width: 100%;
+                margin-right: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>👥 User Management System</h1>
+            <p>Simple CRUD Application with Spring Boot</p>
+        </div>
+
+        <div class="content">
+            <!-- Form Section -->
+            <div class="form-section">
+                <h2 id="formTitle">Add New User</h2>
+                <form id="userForm">
+                    <input type="hidden" id="userId" name="id">
+                    
+                    <div class="form-group">
+                        <label for="name">Name *</label>
+                        <input type="text" id="name" name="name" required minlength="2" maxlength="50">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="email">Email *</label>
+                        <input type="email" id="email" name="email" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="description">Description</label>
+                        <textarea id="description" name="description" rows="3" maxlength="200"></textarea>
+                    </div>
+                    
+                    <button type="submit" class="btn btn-primary" id="submitBtn">Add User</button>
+                    <button type="button" class="btn btn-secondary" id="cancelBtn" onclick="resetForm()">Cancel</button>
+                </form>
+            </div>
+
+            <!-- Alert Messages -->
+            <div id="alertContainer"></div>
+
+            <!-- Users Table -->
+            <div class="table-container">
+                <h2>Users List</h2>
+                <button class="btn btn-success" onclick="loadUsers()">Refresh List</button>
+                <div id="loading" class="loading hidden">Loading users...</div>
+                <table id="usersTable" class="hidden">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Name</th>
+                            <th>Email</th>
+                            <th>Description</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="usersTableBody">
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const API_BASE_URL = '/api/users';
+        let isEditMode = false;
+
+        // DOM Elements
+        const userForm = document.getElementById('userForm');
+        const formTitle = document.getElementById('formTitle');
+        const submitBtn = document.getElementById('submitBtn');
+        const usersTable = document.getElementById('usersTable');
+        const usersTableBody = document.getElementById('usersTableBody');
+        const loading = document.getElementById('loading');
+        const alertContainer = document.getElementById('alertContainer');
+
+        // Event Listeners
+        userForm.addEventListener('submit', handleFormSubmit);
+        document.addEventListener('DOMContentLoaded', loadUsers);
+
+        // Form Submission Handler
+        async function handleFormSubmit(e) {
+            e.preventDefault();
+            
+            const formData = new FormData(userForm);
+            const userData = {
+                name: formData.get('name'),
+                email: formData.get('email'),
+                description: formData.get('description')
+            };
+
+            const userId = formData.get('id');
+            const url = userId ? `${API_BASE_URL}/${userId}` : API_BASE_URL;
+            const method = userId ? 'PUT' : 'POST';
+
+            try {
+                const response = await fetch(url, {
+                    method: method,
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(userData)
+                });
+
+                const result = await response.json();
+
+                if (response.ok) {
+                    showAlert(`User ${isEditMode ? 'updated' : 'created'} successfully!`, 'success');
+                    resetForm();
+                    loadUsers();
+                } else {
+                    showAlert(result || 'An error occurred', 'error');
+                }
+            } catch (error) {
+                showAlert('Network error: ' + error.message, 'error');
+            }
+        }
+
+        // Load Users
+        async function loadUsers() {
+            showLoading(true);
+            
+            try {
+                const response = await fetch(API_BASE_URL);
+                const users = await response.json();
+
+                if (response.ok) {
+                    displayUsers(users);
+                } else {
+                    showAlert('Failed to load users', 'error');
+                }
+            } catch (error) {
+                showAlert('Network error: ' + error.message, 'error');
+            } finally {
+                showLoading(false);
+            }
+        }
+
+        // Display Users in Table
+        function displayUsers(users) {
+            usersTableBody.innerHTML = '';
+            
+            if (users.length === 0) {
+                usersTableBody.innerHTML = '<tr><td colspan="5" style="text-align: center; color: #666;">No users found</td></tr>';
+            } else {
+                users.forEach(user => {
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td>${user.id}</td>
+                        <td>${user.name}</td>
+                        <td>${user.email}</td>
+                        <td>${user.description || '-'}</td>
+                        <td>
+                            <button class="btn btn-warning" onclick="editUser(${user.id})">Edit</button>
+                            <button class="btn btn-danger" onclick="deleteUser(${user.id})">Delete</button>
+                        </td>
+                    `;
+                    usersTableBody.appendChild(row);
+                });
+            }
+            
+            usersTable.classList.remove('hidden');
+        }
+
+        // Edit User
+        async function editUser(id) {
+            try {
+                const response = await fetch(`${API_BASE_URL}/${id}`);
+                const user = await response.json();
+
+                if (response.ok) {
+                    document.getElementById('userId').value = user.id;
+                    document.getElementById('name').value = user.name;
+                    document.getElementById('email').value = user.email;
+                    document.getElementById('description').value = user.description || '';
+
+                    formTitle.textContent = 'Edit User';
+                    submitBtn.textContent = 'Update User';
+                    isEditMode = true;
+
+                    // Scroll to form
+                    document.querySelector('.form-section').scrollIntoView({ behavior: 'smooth' });
+                } else {
+                    showAlert('Failed to load user details', 'error');
+                }
+            } catch (error) {
+                showAlert('Network error: ' + error.message, 'error');
+            }
+        }
+
+        // Delete User
+        async function deleteUser(id) {
+            if (!confirm('Are you sure you want to delete this user?')) {
+                return;
+            }
+
+            try {
+                const response = await fetch(`${API_BASE_URL}/${id}`, {
+                    method: 'DELETE'
+                });
+
+                if (response.ok) {
+                    showAlert('User deleted successfully!', 'success');
+                    loadUsers();
+                } else {
+                    const result = await response.text();
+                    showAlert(result || 'Failed to delete user', 'error');
+                }
+            } catch (error) {
+                showAlert('Network error: ' + error.message, 'error');
+            }
+        }
+
+        // Reset Form
+        function resetForm() {
+            userForm.reset();
+            document.getElementById('userId').value = '';
+            formTitle.textContent = 'Add New User';
+            submitBtn.textContent = 'Add User';
+            isEditMode = false;
+        }
+
+        // Show/Hide Loading
+        function showLoading(show) {
+            if (show) {
+                loading.classList.remove('hidden');
+                usersTable.classList.add('hidden');
+            } else {
+                loading.classList.add('hidden');
+            }
+        }
+
+        // Show Alert
+        function showAlert(message, type) {
+            const alertDiv = document.createElement('div');
+            alertDiv.className = `alert alert-${type}`;
+            alertDiv.textContent = message;
+
+            alertContainer.innerHTML = '';
+            alertContainer.appendChild(alertDiv);
+
+            // Auto-remove alert after 5 seconds
+            setTimeout(() => {
+                if (alertDiv.parentNode) {
+                    alertDiv.parentNode.removeChild(alertDiv);
+                }
+            }, 5000);
+        }
+    </script>
+</body>
+</html> 
