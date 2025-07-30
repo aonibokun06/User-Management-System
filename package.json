@@ -1,12 +1,9 @@
 {
   "name": "springtest",
   "version": "1.0.0",
-  "description": "A modern full-stack CRUD application with Spring Boot backend and Next.js frontend.",
+  "description": "A full-stack CRUD application with Spring Boot backend and Next.js frontend.",
   "main": "index.js",
   "scripts": {
-    "dev": "concurrently \"npm run backend\" \"npm run frontend\"",
-    "backend": "mvn spring-boot:run",
-    "frontend": "cd frontend && npm run dev",
     "build": "npm run build:backend && npm run build:frontend",
     "build:backend": "mvn clean package",
     "build:frontend": "cd frontend && npm run build",
@@ -16,8 +13,5 @@
   "keywords": ["spring-boot", "nextjs", "fullstack", "crud", "typescript"],
   "author": "",
   "license": "ISC",
-  "type": "commonjs",
-  "devDependencies": {
-    "concurrently": "^8.2.2"
-  }
+  "type": "commonjs"
 }
