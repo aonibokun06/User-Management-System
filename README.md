@@ -1,6 +1,6 @@
 # User Management System
 
-A full-stack CRUD application built with Spring Boot backend and Next.js frontend. 
+This is my first Spring boot project which is a full-stack CRUD application built with a Spring Boot backend and Next.js frontend. 
 
 ##  Project Structure
 
