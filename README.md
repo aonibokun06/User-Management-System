@@ -36,12 +36,12 @@ User-Management-System/
    cd frontend && npm install
    ```
 
-3. **Start the backend (in root directory)**
+3. **Start the backend**
    ```bash
    mvn spring-boot:run
    ```
 
-4. **Start the frontend (in new terminal)**
+4. **Start the frontend**
    ```bash
    cd frontend && npm run dev
    ```
